@@ -1,20 +1,36 @@
-###Workflow  
+### Workflow  
   
-*MON Afternoon / TUES morning
+* MON Afternoon / TUES morning
 
 - [ ] Create class diagram
   - Estimated Time: 30 min
   - Actual Time:
 
-- [ ] Create project classes  
-  - Estimated Time: 1 hr
+- [ ] Create project classes   
+   - Estimated Time: 1 hr
   - Actual Time: 
   - Host
-    - Id, Name, Email, Daily rates, List of Reservations, State, City, ZIP code  
+    - Id (String)
+    - First Name (String)
+    - Last Name (String)
+    - Email (String)
+    - Weekday Rate (BigDecimal)
+    - Weekend Rate (BigDecimal)
+    - State (String)
+    - City (String)
+    - ZIP (int)
   - Guest  
-    - Id, Name, Email, Phone, State  
+    - Id (int)
+    - First Name (String)
+    - Last Name (String)
+    - Email (String)
+    - Phone (String)
+    - State (String)
   - Reservation
-    - Date check-in, Date check-out, Guest id, Total cost
+    - Date check-in (LocalDate)
+    - Date Check-out (LocalDate)
+    - Guest Id (int)
+    - Total Cost (BigDecimal)
 - [ ] Create project framework  
   -Estimated time: 1 hr  
   -Actual time:  
@@ -32,7 +48,7 @@
   - Serialize/Deserialize
   - findAll
   
-*TUES Afternoon / WED Morning
+* TUES Afternoon / WED Morning
 - [ ] Add basic view / ui methods
   - Estimated time: 2 hrs
   - Actual time:  
@@ -51,7 +67,7 @@
       - (If possible maybe save this until the end)  
   - Test repo and domain as you go  
 
-*WED Afternoon / THURS Morning
+* WED Afternoon / THURS Morning
 - [ ] Work on add reservation  
   - Estimated time: 3 hrs
   - Actual time:  
@@ -87,7 +103,7 @@
   -Get user inputs from view
   -Pass into controller
 
-*THURS Afternoon / FRI Morning  
+* THURS Afternoon / FRI Morning  
 - [ ] Work on delete reservation
   - Estimated time: 2 hrs
   - Actual time:  
@@ -97,5 +113,5 @@
   - Validations:
     - Ensure date not in past
   
-*FRI Afternoon / Weekend  
+* FRI Afternoon / Weekend  
 -[ ] Work on bug fixing and polish
