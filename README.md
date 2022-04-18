@@ -36,11 +36,17 @@
     - Guest (Guest)
 - [ ] Create project framework  
   -Estimated time: 1 hr  
-  -Actual time:  
-        - Guest, host, reservation repos   
-        - Guest, host, reservation services  
-        - UI & View  
-        - App  
+  -Actual time: 
+- Repos:
+  - Guest   
+  - Host 
+  - Reservation 
+- Services:
+  - Guest
+  - Host
+  - Reservation
+- UI & View  
+- App  
 - [ ] Add spring XML dependencies
   - Estimated Time: 15 min
   - Actual Time:  
