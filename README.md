@@ -3,8 +3,12 @@
 *MON Afternoon / TUES morning
 
 - [ ] Create class diagram
+  - Estimated Time: 30 min
+  - Actual Time:
 
 - [ ] Create project classes  
+  - Estimated Time: 1 hr
+  - Actual Time: 
   - Host
     - Id, Name, Email, Daily rates, List of Reservations, State, City, ZIP code  
   - Guest  
@@ -12,22 +16,32 @@
   - Reservation
     - Date check-in, Date check-out, Guest id, Total cost
 - [ ] Create project framework  
-  - Guest, host, reservation repos 
-  - Guest, host, reservation services
-  - UI & View  
-  - App  
-- [ ] Add spring XML dependencies 
+  -Estimated time: 1 hr  
+  -Actual time:  
+        - Guest, host, reservation repos   
+        - Guest, host, reservation services  
+        - UI & View  
+        - App  
+- [ ] Add spring XML dependencies
+  - Estimated Time: 15 min
+  - Actual Time:  
 - [ ] Add basic repository methods
+  - Estimated time: 1 hr
+  - Actual time: 
   - Read & write to file
   - Serialize/Deserialize
   - findAll
   
 *TUES Afternoon / WED Morning
 - [ ] Add basic view / ui methods
+  - Estimated time: 2 hrs
+  - Actual time:  
   - ReadInt
   - ReadString
   - Setup main menu
 - [ ] Work on view reservations by host
+  - Estimated time: 3 hrs
+  - Actual time: 
   - Find reservations by host
     - Sort reservations by date
   - Verify fields in service
@@ -39,6 +53,8 @@
 
 *WED Afternoon / THURS Morning
 - [ ] Work on add reservation  
+  - Estimated time: 3 hrs
+  - Actual time:  
   - Create add method in repository
     - Parameters:
       - Guest 
@@ -55,7 +71,9 @@
   - Collect guest and host id from view
   - Call method from controller
   - Print summary from view
-- [ ] Work on update reservation 
+- [ ] Work on update reservation
+  - Estimated time: 3 hrs
+  - Actual time: 
   - Create edit method in repo
     - Parameters:
       - Guest
@@ -71,11 +89,13 @@
 
 *THURS Afternoon / FRI Morning  
 - [ ] Work on delete reservation
+  - Estimated time: 2 hrs
+  - Actual time:  
   - Parameters:
     - Guest
     - Host
   - Validations:
     - Ensure date not in past
   
-*FRI Afternoon / Weekend
+*FRI Afternoon / Weekend  
 -[ ] Work on bug fixing and polish
