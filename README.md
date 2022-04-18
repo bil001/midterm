@@ -19,6 +19,7 @@
     - State (String)
     - City (String)
     - ZIP (int)
+    
   - Guest  
     - Id (int)
     - First Name (String)
@@ -31,6 +32,8 @@
     - Date Check-out (LocalDate)
     - Guest Id (int)
     - Total Cost (BigDecimal)
+    - Host (Host)
+    - Guest (Guest)
 - [ ] Create project framework  
   -Estimated time: 1 hr  
   -Actual time:  
@@ -114,4 +117,4 @@
     - Ensure date not in past
   
 * FRI Afternoon / Weekend  
--[ ] Work on bug fixing and polish
+- [ ] Work on bug fixing and polish
