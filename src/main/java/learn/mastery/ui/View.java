@@ -26,7 +26,7 @@ public class View {
         String message = String.format("Select [%s-%s]: ",min,max);
         return MainMenuOption.fromValue(io.readInt(message, min, max));
     }
-
+    //TODO Filter hosts by state / last name / reservation? [y/n] before displaying
     public Host chooseHost(List<Host> hosts){
         displayHosts(hosts);
 

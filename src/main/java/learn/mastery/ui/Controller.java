@@ -58,9 +58,12 @@ public class Controller {
     private void viewById(){
         view.displayHeader(MainMenuOption.VIEW.getMessage());
         List<Host> hosts = hostService.findAll();
-        String hostId = view.chooseHost(hosts).getId();
-        List<Reservation> reservations = reservationService.findById(hostId);
-        view.displayReservations(reservations);
+        Host host = view.chooseHost(hosts);
+        if(host!=null) {
+            String hostId = host.getId();
+            List<Reservation> reservations = reservationService.findById(hostId);
+            view.displayReservations(reservations);
+        }
         view.enterToContinue();
     }
 }
