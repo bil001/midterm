@@ -1,5 +1,7 @@
 package learn.mastery.data;
 
+import learn.mastery.models.Guest;
+import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
 
 import java.io.*;
@@ -68,7 +70,16 @@ public class ReservationFileRepository implements ReservationRepository {
         result.setResId(Integer.parseInt(fields[0]));
         result.setStarDate(LocalDate.parse(fields[1]));
         result.setEndDate(LocalDate.parse(fields[2]));
-        result.setTotal(BigDecimal.valueOf(Long.parseLong(fields[3])));
+        result.setTotal(BigDecimal.valueOf(Double.parseDouble(fields[4])));
+
+        Guest guest = new Guest();
+        guest.setId(Integer.parseInt(fields[3]));
+        result.setGuest(guest);
+
+        Host host = new Host();
+        host.setId(id);
+        result.setHost(host);
+
         return result;
     }
 }

@@ -1,7 +1,11 @@
 package learn.mastery.ui;
 
+import learn.mastery.models.Host;
+import learn.mastery.models.Reservation;
 import learn.mastery.models.State;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class View {
@@ -19,8 +23,60 @@ public class View {
             max=option.getValue();
         }
 
-        String message = String.format("Select [%s-%s]",min,max);
+        String message = String.format("Select [%s-%s]: ",min,max);
         return MainMenuOption.fromValue(io.readInt(message, min, max));
+    }
+
+    public Host chooseHost(List<Host> hosts){
+        displayHosts(hosts);
+
+        if(hosts.size() == 0){
+            return null;
+        }
+        String email = io.readRequiredString("Select a host's email: ");
+
+        Host host = hosts.stream()
+                .filter(host1 -> host1.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElse(null);
+        if(host == null){
+            displayStatus(false, String.format("No host with email %s was found",email));
+        }
+        return host;
+    }
+
+    public void enterToContinue() {
+        io.readString("Press [Enter] to continue.");
+    }
+
+    public void displayReservations(List<Reservation> reservations){
+        if (reservations == null || reservations.isEmpty()){
+            io.println("No reservations found.");
+            return;
+        }
+        reservations = reservations.stream()
+                .sorted(Comparator.comparing(Reservation::getStarDate))
+                .toList();
+        for(Reservation r : reservations){
+            io.printf("Guest: %s %s | Start Date: %s | End Date: %s | Revenue: %s%n",
+                    r.getGuest().getFirstName(),
+                    r.getGuest().getLastName(),
+                    r.getStarDate(),
+                    r.getEndDate(),
+                    r.getTotal());
+        }
+    }
+
+    public void displayHosts(List<Host> hosts){
+        if(hosts.size()==0){
+            io.println("No hosts found.");
+        }
+
+        for(Host h : hosts){
+            io.printf("Last Name: %s | Email Address: %s%n",
+                    h.getLastName(),
+                    h.getEmail());
+        }
     }
 
     public void displayHeader(String message){

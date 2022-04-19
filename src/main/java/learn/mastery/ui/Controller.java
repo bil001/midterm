@@ -4,6 +4,10 @@ import learn.mastery.data.DataException;
 import learn.mastery.domain.GuestService;
 import learn.mastery.domain.HostService;
 import learn.mastery.domain.ReservationService;
+import learn.mastery.models.Host;
+import learn.mastery.models.Reservation;
+
+import java.util.List;
 
 public class Controller {
 
@@ -19,6 +23,16 @@ public class Controller {
         this.view = view;
     }
 
+    public void run(){
+        view.displayHeader("Welcome to Don't Wreck My House!");
+        try{
+            runAppLoop();
+        }catch(DataException ex){
+            view.displayException(ex);
+        }
+        view.displayHeader("Goodbye...");
+    }
+
     private void runAppLoop() throws DataException {
         MainMenuOption option;
 
@@ -26,7 +40,7 @@ public class Controller {
             option = view.selectMainMenuOption();
             switch (option) {
                 case VIEW:
-                    System.out.println("Feature not implemented yet");
+                    viewById();
                     break;
                 case ADD:
                     System.out.println("Feature not implemented yet");
@@ -39,5 +53,14 @@ public class Controller {
                     break;
             }
         } while (option != MainMenuOption.EXIT);
+    }
+
+    private void viewById(){
+        view.displayHeader(MainMenuOption.VIEW.getMessage());
+        List<Host> hosts = hostService.findAll();
+        String hostId = view.chooseHost(hosts).getId();
+        List<Reservation> reservations = reservationService.findById(hostId);
+        view.displayReservations(reservations);
+        view.enterToContinue();
     }
 }
