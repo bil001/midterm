@@ -43,6 +43,21 @@ public class ReservationFileRepository implements ReservationRepository {
         return result;
     }
 
+    @Override
+    public Reservation add(Reservation reservation) throws DataException{
+        List<Reservation> all = findById(reservation.getHost().getId());
+
+        int nextId = all.stream()
+                .mapToInt(Reservation::getResId)
+                .max()
+                .orElse(0) + 1;
+
+        reservation.setResId(nextId);
+        all.add(reservation);
+        writeAll(all, reservation.getHost().getId());
+        return reservation;
+    }
+
     private void writeAll(List<Reservation> reservations, String id) throws DataException {
         try (PrintWriter writer = new PrintWriter(getFilePath(id))) {
 
