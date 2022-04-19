@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="consoleIO" class="learn.mastery.ui.ConsoleIO"/>
+    <bean id="view" class="learn.mastery.ui.View">
+        <constructor-arg ref="consoleIO"/>
+    </bean>
+
+    <bean id="reservationRepo" class="learn.mastery.data.ReservationFileRepository">
+        <constructor-arg value="./data/reservations"/>
+    </bean>
+    <bean id="hostRepo" class="learn.mastery.data.HostFileRepository">
+        <constructor-arg value="./data/hosts.csv"/>
+    </bean>
+    <bean id="guestRepo" class="learn.mastery.data.GuestFileRepository">
+        <constructor-arg value="./data/guests.csv"/>
+    </bean>
+
+    <bean id="reservationService" class="learn.mastery.domain.ReservationService">
+        <constructor-arg ref="reservationRepo"/>
+        <constructor-arg ref="hostRepo"/>
+        <constructor-arg ref="guestRepo"/>
+    </bean>
+    <bean id="hostService" class="learn.mastery.domain.HostService">
+        <constructor-arg ref="hostRepo"/>
+    </bean>
+    <bean id="guestService" class="learn.mastery.domain.GuestService">
+        <constructor-arg ref="guestRepo"/>
+    </bean>
+
+    <bean id="controller" class="learn.ui.Controller">
+        <constructor-arg ref="guestService"/>
+        <constructor-arg ref="hostService"/>
+        <constructor-arg ref="reservationService"/>
+        <constructor-arg ref="view"/>
+    </bean>
+</beans>

@@ -1,4 +1,4 @@
-package models;
+package learn.mastery.models;
 
 import java.math.BigDecimal;
 
@@ -7,12 +7,12 @@ public class Host {
     private String id;
     private String lastName;
     private String email;
-    private int phone;
+    private String phone;
     private String address;
     private String city;
     private String state;
     private int postalCode;
-    private BigDecimal weekdayRate;
+    private BigDecimal standardRate;
     private BigDecimal weekendRate;
 
     public String getId() {
@@ -39,11 +39,11 @@ public class Host {
         this.email = email;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -79,12 +79,12 @@ public class Host {
         this.postalCode = postalCode;
     }
 
-    public BigDecimal getWeekdayRate() {
-        return weekdayRate;
+    public BigDecimal getStandardRate() {
+        return standardRate;
     }
 
-    public void setWeekdayRate(BigDecimal weekdayRate) {
-        this.weekdayRate = weekdayRate;
+    public void setStandardRate(BigDecimal standardRate) {
+        this.standardRate = standardRate;
     }
 
     public BigDecimal getWeekendRate() {
@@ -106,7 +106,7 @@ public class Host {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", postalCode=" + postalCode +
-                ", weekdayRate=" + weekdayRate +
+                ", standardRate=" + standardRate +
                 ", weekendRate=" + weekendRate +
                 '}';
     }
