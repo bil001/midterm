@@ -1,5 +1,6 @@
 package learn.mastery.domain;
 
+import learn.mastery.data.DataException;
 import learn.mastery.data.GuestRepository;
 import learn.mastery.data.HostRepository;
 import learn.mastery.data.ReservationRepository;
@@ -38,6 +39,17 @@ public class ReservationService {
         return result;
     }
 
+    public Result<Reservation> add(Reservation reservation) throws DataException{
+        Result<Reservation> result = validate(reservation);
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        result.setPayload(reservationRepo.add(reservation));
+
+        return result;
+    }
+
     private Result<Reservation> validate(Reservation reservation){
         Result<Reservation> result = validateNulls(reservation);
         if(!result.isSuccess()){
@@ -45,6 +57,18 @@ public class ReservationService {
         }
 
         validateFields(reservation,result);
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        List<Guest> guests = guestRepo.findAll();
+        validateGuestExists(guests, reservation, result);
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        List<Host> hosts = hostRepo.findAll();
+        validateHostExists(hosts,reservation,result);
         if(!result.isSuccess()){
             return result;
         }
@@ -81,6 +105,24 @@ public class ReservationService {
         return result;
     }
 
+    private void validateHostExists(List<Host> hosts, Reservation reservation, Result<Reservation> result){
+        for(Host h : hosts){
+            if(h.getId().equalsIgnoreCase(reservation.getHost().getId())){
+                return;
+            }
+        }
+        result.addErrorMessage("Host id not found.");
+    }
+
+    private void validateGuestExists(List<Guest> guests, Reservation reservation, Result<Reservation> result){
+        for(Guest g : guests){
+            if(g.getId() == reservation.getGuest().getId()){
+                return;
+            }
+        }
+        result.addErrorMessage("Guest id not found.");
+    }
+
     private void validateFields(Reservation reservation, Result<Reservation> result){
 
         if(reservation.getStartDate().isAfter(reservation.getEndDate())){
@@ -92,7 +134,7 @@ public class ReservationService {
         }
 
     }
-
+    //TODO reverse date validations
     private void validateOverlap(List<Reservation> all, Reservation reservation, Result<Reservation> result){
         for (Reservation r : all){
             if((reservation.getStartDate().isAfter(r.getStartDate())
@@ -105,6 +147,11 @@ public class ReservationService {
                     || reservation.getEndDate().isEqual(r.getEndDate())){
                 result.addErrorMessage("End date overlaps with another reservation.");
             }
+            if(reservation.getStartDate().isBefore(r.getStartDate())
+                    && reservation.getEndDate().isAfter(r.getEndDate())){
+                result.addErrorMessage("Reservation overlaps with an existing reservation.");
+            }
+//            if(reservation.getStartDate().isEqual())
         }
     }
 }

@@ -61,4 +61,25 @@ class ReservationFileRepositoryTest {
 
         assertEquals(14, reservation.getResId());
     }
+
+    @Test
+    void shouldCalculateTotal() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setStartDate(LocalDate.now());
+        reservation.setEndDate(LocalDate.now().plusDays(2));
+
+        Guest guest = new Guest();
+        guest.setId(50);
+        reservation.setGuest(guest);
+
+        Host host = new Host();
+        host.setId("3edda6bc-ab95-49a8-8962-d50b53f84b15");
+        host.setStandardRate(BigDecimal.valueOf(100));
+        host.setWeekendRate(BigDecimal.valueOf(150));
+        reservation.setHost(host);
+
+        reservation = repo.add(reservation);
+
+        assertEquals(BigDecimal.valueOf(350), reservation.getTotal());
+    }
 }

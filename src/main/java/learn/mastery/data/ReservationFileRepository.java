@@ -7,6 +7,7 @@ import learn.mastery.models.Reservation;
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ReservationFileRepository implements ReservationRepository {
     }
 
     @Override
-    public Reservation add(Reservation reservation) throws DataException{
+    public Reservation add(Reservation reservation) throws DataException {
         List<Reservation> all = findById(reservation.getHost().getId());
 
         int nextId = all.stream()
@@ -52,10 +53,32 @@ public class ReservationFileRepository implements ReservationRepository {
                 .max()
                 .orElse(0) + 1;
 
+        reservation.setTotal(findTotal(reservation));
         reservation.setResId(nextId);
         all.add(reservation);
         writeAll(all, reservation.getHost().getId());
         return reservation;
+    }
+
+    private BigDecimal findTotal(Reservation reservation) {
+        LocalDate start = reservation.getStartDate();
+        LocalDate end = reservation.getEndDate();
+
+        BigDecimal standardRate = reservation.getHost().getStandardRate();
+        BigDecimal weekendRate = reservation.getHost().getWeekendRate();
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (; !start.isEqual(end.plusDays(1)); start = start.plusDays(1)) {
+            if(start.getDayOfWeek()== DayOfWeek.FRIDAY
+                    || start.getDayOfWeek() == DayOfWeek.SATURDAY){
+                total = total.add(weekendRate);
+            }else{
+                total = total.add(standardRate);
+            }
+        }
+
+        return total;
     }
 
     private void writeAll(List<Reservation> reservations, String id) throws DataException {
