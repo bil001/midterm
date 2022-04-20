@@ -45,8 +45,27 @@ public class ReservationService {
             return result;
         }
 
+        validateStartInPast(reservation,result);
+        if(!result.isSuccess()){
+            return result;
+        }
+
         result.setPayload(reservationRepo.add(reservation));
 
+        return result;
+    }
+
+    public Result<Reservation> update(Reservation reservation) throws DataException{
+        Result<Reservation> result = validate(reservation);
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        boolean success = reservationRepo.update(reservation);
+
+        if(!success){
+            result.addErrorMessage("Could not find reservation.");
+        }
         return result;
     }
 
@@ -56,7 +75,7 @@ public class ReservationService {
             return result;
         }
 
-        validateFields(reservation,result);
+        validateSequence(reservation,result);
         if(!result.isSuccess()){
             return result;
         }
@@ -123,17 +142,18 @@ public class ReservationService {
         result.addErrorMessage("Guest id not found.");
     }
 
-    private void validateFields(Reservation reservation, Result<Reservation> result){
-
+    private void validateSequence(Reservation reservation, Result<Reservation> result){
         if(reservation.getStartDate().isAfter(reservation.getEndDate())){
             result.addErrorMessage("The start date must be before the end date.");
         }
+    }
 
+    private void validateStartInPast(Reservation reservation, Result<Reservation> result){
         if(reservation.getStartDate().isBefore(LocalDate.now())){
             result.addErrorMessage("The start date must be in the future.");
         }
-
     }
+
     //TODO reverse date validations
     private void validateOverlap(List<Reservation> all, Reservation reservation, Result<Reservation> result){
         for (Reservation r : all){

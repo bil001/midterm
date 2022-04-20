@@ -9,6 +9,7 @@ import learn.mastery.models.Guest;
 import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
 
+import java.math.RoundingMode;
 import java.util.List;
 
 public class Controller {
@@ -82,12 +83,12 @@ public class Controller {
                     "Reservation %s created.%n" +
                     "Start Date: %s%n" +
                     "End Date: %s%n" +
-                    "Price: %s%n" +
+                    "Price: $%s%n" +
                     "+++++++++++++++++",
                     result.getPayload().getResId(),
                     result.getPayload().getStartDate(),
                     result.getPayload().getEndDate(),
-                    result.getPayload().getTotal());
+                    result.getPayload().getTotal().setScale(2, RoundingMode.HALF_UP));
             view.displayStatus(true, successMessage);
         }
     }

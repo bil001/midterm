@@ -46,7 +46,7 @@ class ReservationFileRepositoryTest {
     void shouldAdd() throws DataException{
         Reservation reservation = new Reservation();
         reservation.setStartDate(LocalDate.of(2025,12,31));
-        reservation.setEndDate(LocalDate.of(2025,1,4));
+        reservation.setEndDate(LocalDate.of(2026,1,4));
         reservation.setTotal(BigDecimal.valueOf(2000));
 
         Guest guest = new Guest();
@@ -55,6 +55,8 @@ class ReservationFileRepositoryTest {
 
         Host host = new Host();
         host.setId("3edda6bc-ab95-49a8-8962-d50b53f84b15");
+        host.setStandardRate(BigDecimal.valueOf(20));
+        host.setWeekendRate(BigDecimal.valueOf(50));
         reservation.setHost(host);
 
         reservation = repo.add(reservation);
@@ -81,5 +83,47 @@ class ReservationFileRepositoryTest {
         reservation = repo.add(reservation);
 
         assertEquals(BigDecimal.valueOf(350), reservation.getTotal());
+    }
+
+    @Test
+    void shouldUpdate() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(12);
+        reservation.setStartDate(LocalDate.of(3000,5,1));
+        reservation.setEndDate(LocalDate.of(3000,6,7));
+
+        Guest guest = new Guest();
+        guest.setId(50);
+        reservation.setGuest(guest);
+
+        Host host = new Host();
+        host.setId("3edda6bc-ab95-49a8-8962-d50b53f84b15");
+        reservation.setHost(host);
+        host.setStandardRate(BigDecimal.valueOf(20));
+        host.setWeekendRate(BigDecimal.valueOf(50));
+
+        boolean result = repo.update(reservation);
+        assertTrue(result);
+    }
+
+    @Test
+    void shouldNotUpdate() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(12);
+        reservation.setStartDate(LocalDate.of(3000,5,1));
+        reservation.setEndDate(LocalDate.of(3000,6,7));
+
+        Guest guest = new Guest();
+        guest.setId(50);
+        reservation.setGuest(guest);
+
+        Host host = new Host();
+        host.setId("Hello!");
+        reservation.setHost(host);
+        host.setStandardRate(BigDecimal.valueOf(20));
+        host.setWeekendRate(BigDecimal.valueOf(50));
+
+        boolean result = repo.update(reservation);
+        assertFalse(result);
     }
 }
