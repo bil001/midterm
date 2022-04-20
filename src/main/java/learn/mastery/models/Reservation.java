@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 public class Reservation {
     private int resId;
-    private LocalDate starDate;
+    private LocalDate startDate;
     private LocalDate endDate;
     private Guest guest;
     private Host host;
@@ -19,12 +19,12 @@ public class Reservation {
         this.resId = resId;
     }
 
-    public LocalDate getStarDate() {
-        return starDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setStarDate(LocalDate starDate) {
-        this.starDate = starDate;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getEndDate() {
@@ -63,7 +63,7 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "resId=" + resId +
-                ", starDate=" + starDate +
+                ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", guest=" + guest +
                 ", host=" + host +

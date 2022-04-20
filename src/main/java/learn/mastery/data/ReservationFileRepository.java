@@ -74,7 +74,7 @@ public class ReservationFileRepository implements ReservationRepository {
     private String serialize(Reservation reservation) {
         return String.format("%s,%s,%s,%s,%s",
                 reservation.getResId(),
-                reservation.getStarDate(),
+                reservation.getStartDate(),
                 reservation.getEndDate(),
                 reservation.getGuest().getId(),
                 reservation.getTotal());
@@ -83,7 +83,7 @@ public class ReservationFileRepository implements ReservationRepository {
     private Reservation deserialize(String[] fields, String id) {
         Reservation result = new Reservation();
         result.setResId(Integer.parseInt(fields[0]));
-        result.setStarDate(LocalDate.parse(fields[1]));
+        result.setStartDate(LocalDate.parse(fields[1]));
         result.setEndDate(LocalDate.parse(fields[2]));
         result.setTotal(BigDecimal.valueOf(Double.parseDouble(fields[4])));
 

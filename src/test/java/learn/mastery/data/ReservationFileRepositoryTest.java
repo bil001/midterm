@@ -20,7 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ReservationFileRepositoryTest {
-    static final String TEST_FILE_PATH = "./data/3edda6bc-ab95-49a8-8962-d50b53f84b15.csv";
+    static final String TEST_FILE_PATH = "./data/reservations-test/3edda6bc-ab95-49a8-8962-d50b53f84b15.csv";
     static final String SEED_FILE_PATH = "./data/reservation-seed-3edda6bc-ab95-49a8-8962-d50b53f84b15.csv";
     static final String DIR_PATH = "./data/reservations-test";
     static final int RESERVATION_COUNT = 13;
@@ -45,7 +45,7 @@ class ReservationFileRepositoryTest {
     @Test
     void shouldAdd() throws DataException{
         Reservation reservation = new Reservation();
-        reservation.setStarDate(LocalDate.of(2025,12,31));
+        reservation.setStartDate(LocalDate.of(2025,12,31));
         reservation.setEndDate(LocalDate.of(2025,1,4));
         reservation.setTotal(BigDecimal.valueOf(2000));
 

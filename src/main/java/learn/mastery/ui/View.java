@@ -4,7 +4,6 @@ import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
 import learn.mastery.models.State;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -55,13 +54,13 @@ public class View {
             return;
         }
         reservations = reservations.stream()
-                .sorted(Comparator.comparing(Reservation::getStarDate))
+                .sorted(Comparator.comparing(Reservation::getStartDate))
                 .toList();
         for(Reservation r : reservations){
             io.printf("Guest: %s %s | Start Date: %s | End Date: %s | Revenue: %s%n",
                     r.getGuest().getFirstName(),
                     r.getGuest().getLastName(),
-                    r.getStarDate(),
+                    r.getStartDate(),
                     r.getEndDate(),
                     r.getTotal());
         }
