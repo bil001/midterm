@@ -74,6 +74,18 @@ public class ReservationFileRepository implements ReservationRepository {
         return false;
     }
 
+    @Override
+    public boolean delete(Reservation reservation) throws DataException{
+        List<Reservation> all = findById(reservation.getHost().getId());
+        for(Reservation r : all){
+            if(r.getResId()== reservation.getResId()){
+                all.remove(r);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private BigDecimal findTotal(Reservation reservation) {
         LocalDate start = reservation.getStartDate();
         LocalDate end = reservation.getEndDate();
