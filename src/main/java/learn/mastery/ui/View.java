@@ -1,5 +1,6 @@
 package learn.mastery.ui;
 
+import learn.mastery.models.Guest;
 import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
 import learn.mastery.models.State;
@@ -44,6 +45,34 @@ public class View {
         return host;
     }
 
+    public Guest chooseGuest(List<Guest> guests){
+        displayGuests(guests);
+
+        if(guests.size()==0){
+            return null;
+        }
+
+        int id = io.readInt("Select a guest's id: ");
+
+        Guest guest = guests.stream()
+                .filter(guest1 -> guest1.getId()==id)
+                .findFirst()
+                .orElse(null);
+        if(guest == null){
+            displayStatus(false, String.format("No guest with id [%s] was found",id));
+        }
+        return guest;
+    }
+
+    public Reservation makeReservation(Host host, Guest guest){
+        Reservation reservation = new Reservation();
+        reservation.setHost(host);
+        reservation.setGuest(guest);
+        reservation.setStartDate(io.readLocalDate("Start Date: "));
+        reservation.setEndDate(io.readLocalDate("End Date: "));
+        return reservation;
+    }
+
     public void enterToContinue() {
         io.readString("Press [Enter] to continue.");
     }
@@ -66,15 +95,32 @@ public class View {
         }
     }
 
+    public void displayGuests(List<Guest> guests){
+        if(guests.size()==0){
+            io.println("No guests found.");
+        }
+
+        for(Guest g : guests){
+            io.printf("Name: %s %s | id: [%s] | Email: %s%n",
+                    g.getFirstName(),
+                    g.getLastName(),
+                    g.getId(),
+                    g.getEmail());
+        }
+    }
+
     public void displayHosts(List<Host> hosts){
         if(hosts.size()==0){
             io.println("No hosts found.");
         }
 
         for(Host h : hosts){
-            io.printf("Last Name: %s | Email Address: %s%n",
+            io.printf("Last Name: %s | Email Address: %s | Standard Rate: %s | Weekend Rate: %s%n",
                     h.getLastName(),
-                    h.getEmail());
+                    h.getEmail(),
+                    h.getStandardRate(),
+                    h.getWeekendRate())
+                    ;
         }
     }
 

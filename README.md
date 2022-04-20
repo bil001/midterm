@@ -2,13 +2,13 @@
   
 * MON Afternoon / TUES morning
 
-- [ ] Create class diagram
+- [ x ] Create class diagram
   - Estimated Time: 30 min
-  - Actual Time:
+  - Actual Time: 15 min
 
-- [ ] Create project classes   
+- [ x ] Create project classes   
    - Estimated Time: 1 hr
-  - Actual Time: 
+  - Actual Time: 30 min
   - Host
     - Id (String)
     - First Name (String)
@@ -34,9 +34,9 @@
     - Total Cost (BigDecimal)
     - Host (Host)
     - Guest (Guest)
-- [ ] Create project framework  
+- [ x ] Create project framework  
   -Estimated time: 1 hr  
-  -Actual time: 
+  -Actual time: 45 min
 - Repos:
   - Guest   
   - Host 
@@ -47,26 +47,26 @@
   - Reservation
 - UI & View  
 - App  
-- [ ] Add spring XML dependencies
+- [ x ] Add spring XML dependencies
   - Estimated Time: 15 min
-  - Actual Time:  
-- [ ] Add basic repository methods
+  - Actual Time:  5 min
+- [ x ] Add basic repository methods
   - Estimated time: 1 hr
-  - Actual time: 
+  - Actual time: 30 min
   - Read & write to file
   - Serialize/Deserialize
   - findAll
   
 * TUES Afternoon / WED Morning
-- [ ] Add basic view / ui methods
+- [ x ] Add basic view / ui methods
   - Estimated time: 2 hrs
-  - Actual time:  
+  - Actual time:  1 hr
   - ReadInt
   - ReadString
   - Setup main menu
-- [ ] Work on view reservations by host
+- [ x ] Work on view reservations by host
   - Estimated time: 3 hrs
-  - Actual time: 
+  - Actual time: 3 hrs
   - Find reservations by host
     - Sort reservations by date
   - Verify fields in service
@@ -77,9 +77,9 @@
   - Test repo and domain as you go  
 
 * WED Afternoon / THURS Morning
-- [ ] Work on add reservation  
+- [ x ] Work on add reservation  
   - Estimated time: 3 hrs
-  - Actual time:  
+  - Actual time: 4 hrs
   - Create add method in repository
     - Parameters:
       - Guest 
