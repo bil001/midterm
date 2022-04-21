@@ -52,25 +52,20 @@ public class Controller {
 
     private void viewById(){
         view.displayHeader(MainMenuOption.VIEW.getMessage());
-        List<Host> hosts = hostService.findAll();
-        Host host = view.chooseHost(hosts);
+        Host host = selectHost();
         if(host!=null) {
-            String hostId = host.getId();
-            List<Reservation> reservations = reservationService.findById(hostId);
-            view.displayReservations(reservations);
+            displayReservations(host);
         }
         view.enterToContinue();
     }
 
     private void addReservation() throws DataException{
         view.displayHeader(MainMenuOption.ADD.getMessage());
-        List<Host> hosts = hostService.findAll();
-        Host host = view.chooseHost(hosts);
+        Host host = selectHost();
         if(host==null){
             return;
         }
-        List<Guest> guests = guestService.findAll();
-        Guest guest = view.chooseGuest(guests);
+        Guest guest = selectGuest();
         if(guest==null){
             return;
         }
@@ -91,9 +86,41 @@ public class Controller {
                     result.getPayload().getTotal().setScale(2, RoundingMode.HALF_UP));
             view.displayStatus(true, successMessage);
         }
+        view.enterToContinue();
     }
 
     private void edit() throws DataException{
+        view.displayHeader(MainMenuOption.EDIT.getMessage());
+        Host host = selectHost();
+        List<Reservation> reservations = displayReservations(host);
+        Reservation reservation = view.chooseReservation(reservations);
+        Reservation editedDates = view.makeEditedDates();
+        reservation.setTotal(reservationService.findTotal(editedDates));
+        reservation.setStartDate(editedDates.getStartDate());
+        reservation.setEndDate(editedDates.getEndDate());
+        
+        view.enterToContinue();
+    }
 
+    private Host selectHost(){
+        List<Host> hosts = hostService.findAll();
+        view.displayHeader("Host's state");
+        String hostState = view.getState();
+        hosts = view.filterHostByState(hosts,hostState);
+        return view.chooseHost(hosts);
+    }
+    private Guest selectGuest(){
+        List<Guest> guests = guestService.findAll();
+        view.displayHeader("Guest's state");
+        String guestState = view.getState();
+        guests = view.filterGuestByState(guests,guestState);
+        return view.chooseGuest(guests);
+    }
+
+    private List<Reservation> displayReservations(Host host) {
+        String hostId = host.getId();
+        List<Reservation> reservations = reservationService.findById(hostId);
+        view.displayReservations(reservations);
+        return reservations;
     }
 }

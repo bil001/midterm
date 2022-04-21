@@ -204,4 +204,63 @@ class ReservationServiceTest {
         assertFalse(result.isSuccess());
         assertEquals("Start date overlaps with another reservation.",result.getErrorMessages().get(0));
     }
+
+    @Test
+    void shouldUpdate() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(1);
+        reservation.setStartDate(LocalDate.now());
+        reservation.setEndDate(LocalDate.now().plusDays(2));
+        reservation.setHost(HOST);
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.update(reservation);
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdate() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(0);
+        reservation.setStartDate(LocalDate.now());
+        reservation.setEndDate(LocalDate.now().plusDays(2));
+        reservation.setHost(HOST);
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.update(reservation);
+        assertFalse(result.isSuccess());
+        assertEquals("Could not find reservation.", result.getErrorMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateOverlap() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(1);
+        reservation.setStartDate(LocalDate.of(2024,4,19));
+        reservation.setEndDate(LocalDate.of(2024,4,26));
+        reservation.setHost(HOST);
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.update(reservation);
+        assertFalse(result.isSuccess());
+        assertEquals("Reservation overlaps with an existing reservation.", result.getErrorMessages().get(0));
+    }
+
+    @Test
+    void shouldNotUpdateNewHost() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(1);
+        reservation.setStartDate(LocalDate.now());
+        reservation.setEndDate(LocalDate.now().plusDays(2));
+        reservation.setHost(new Host());
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.update(reservation);
+        assertFalse(result.isSuccess());
+        assertEquals("Host id not found.",result.getErrorMessages().get(0));
+    }
 }

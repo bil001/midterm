@@ -5,8 +5,11 @@ import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
 import learn.mastery.models.State;
 
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class View {
     private final ConsoleIO io;
@@ -26,7 +29,7 @@ public class View {
         String message = String.format("Select [%s-%s]: ",min,max);
         return MainMenuOption.fromValue(io.readInt(message, min, max));
     }
-    //TODO Filter hosts by state / last name / reservation? [y/n] before displaying
+
     public Host chooseHost(List<Host> hosts){
         displayHosts(hosts);
 
@@ -68,9 +71,33 @@ public class View {
         Reservation reservation = new Reservation();
         reservation.setHost(host);
         reservation.setGuest(guest);
-        reservation.setStartDate(io.readLocalDate("Start Date: "));
-        reservation.setEndDate(io.readLocalDate("End Date: "));
+        reservation.setStartDate(io.readLocalDate("Start Date [mm/dd/yyyy]: "));
+        reservation.setEndDate(io.readLocalDate("End Date [mm/dd/yyyy]: "));
         return reservation;
+    }
+
+    public Reservation chooseReservation(List<Reservation> all){
+        int resId = io.readInt("Choose reservation id: ");
+        Reservation res = all.stream()
+                .filter(reservation -> reservation.getResId()==resId)
+                .findFirst()
+                .orElse(null);
+        if(res == null){
+            displayStatus(false,String.format("No reservation with id [%s] was found",resId));
+        }
+        return res;
+    }
+
+    public List<Host> filterHostByState(List<Host> all, String stateAbb){
+        return all.stream()
+                .filter(host -> host.getState().equalsIgnoreCase(stateAbb))
+                .collect(Collectors.toList());
+    }
+
+    public List<Guest> filterGuestByState(List<Guest> all, String stateAbb){
+        return all.stream()
+                .filter(guest -> guest.getState().equalsIgnoreCase(stateAbb))
+                .collect(Collectors.toList());
     }
 
     public void enterToContinue() {
@@ -86,7 +113,8 @@ public class View {
                 .sorted(Comparator.comparing(Reservation::getStartDate))
                 .toList();
         for(Reservation r : reservations){
-            io.printf("Guest: %s %s | Start Date: %s | End Date: %s | Revenue: %s%n",
+            io.printf("Id: [%s] | Guest: %s %s | Start Date: %s | End Date: %s | Revenue: %s%n",
+                    r.getResId(),
                     r.getGuest().getFirstName(),
                     r.getGuest().getLastName(),
                     r.getStartDate(),
@@ -95,17 +123,34 @@ public class View {
         }
     }
 
+    public Reservation makeEditedDates(){
+        displayHeader("Choose a new start and end date");
+        Reservation reservation = new Reservation();
+        reservation.setStartDate(io.readLocalDate("Start Date [mm/dd/yyyy]: "));
+        reservation.setEndDate(io.readLocalDate("End Date [mm/dd/yyyy]: "));
+        return reservation;
+    }
+
+    public void displayReservationSummary(Reservation reservation){
+        displayHeader("Reservation");
+        io.printf("Start Date: %s %nEnd Date: %s %nTotal Cost: $%s%n",
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getTotal().setScale(2, RoundingMode.HALF_UP));
+    }
+
     public void displayGuests(List<Guest> guests){
         if(guests.size()==0){
             io.println("No guests found.");
         }
 
         for(Guest g : guests){
-            io.printf("Name: %s %s | id: [%s] | Email: %s%n",
+            io.printf("Name: %s %s | id: [%s] | Email: %s%n | State: %s",
                     g.getFirstName(),
                     g.getLastName(),
                     g.getId(),
-                    g.getEmail());
+                    g.getEmail(),
+                    g.getState());
         }
     }
 
@@ -115,9 +160,10 @@ public class View {
         }
 
         for(Host h : hosts){
-            io.printf("Last Name: %s | Email Address: %s | Standard Rate: %s | Weekend Rate: %s%n",
+            io.printf("Last Name: %s | Email Address: %s | State: %s | Standard Rate: %s | Weekend Rate: %s%n",
                     h.getLastName(),
                     h.getEmail(),
+                    h.getState(),
                     h.getStandardRate(),
                     h.getWeekendRate())
                     ;

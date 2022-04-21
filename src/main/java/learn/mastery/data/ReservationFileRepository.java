@@ -86,7 +86,8 @@ public class ReservationFileRepository implements ReservationRepository {
         return false;
     }
 
-    private BigDecimal findTotal(Reservation reservation) {
+    @Override
+    public BigDecimal findTotal(Reservation reservation) {
         LocalDate start = reservation.getStartDate();
         LocalDate end = reservation.getEndDate();
 

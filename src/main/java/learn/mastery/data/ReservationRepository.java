@@ -3,6 +3,7 @@ package learn.mastery.data;
 import learn.mastery.models.Reservation;
 
 import javax.xml.crypto.Data;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ReservationRepository {
@@ -14,4 +15,6 @@ public interface ReservationRepository {
     boolean update(Reservation reservation) throws DataException;
 
     boolean delete(Reservation reservation) throws DataException;
+
+    BigDecimal findTotal(Reservation reservation);
 }

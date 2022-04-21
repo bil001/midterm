@@ -8,6 +8,7 @@ import learn.mastery.models.Guest;
 import learn.mastery.models.Host;
 import learn.mastery.models.Reservation;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +68,19 @@ public class ReservationService {
             result.addErrorMessage("Could not find reservation.");
         }
         return result;
+    }
+
+    public BigDecimal findTotal(Reservation reservation){
+        Result<Reservation> result = new Result<>();
+        validateStartInPast(reservation,result);
+        if(!result.isSuccess()){
+            return null;
+        }
+        validateSequence(reservation, result);
+        if(!result.isSuccess()){
+            return null;
+        }
+        return reservationRepo.findTotal(reservation);
     }
 
     private Result<Reservation> validate(Reservation reservation){

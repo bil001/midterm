@@ -47,6 +47,26 @@ public class ReservationRepositoryDouble implements ReservationRepository{
 
     @Override
     public boolean update(Reservation reservation) throws DataException{
+        for(Reservation r : reservations){
+            if(r.getResId() == reservation.getResId()){
+                return true;
+            }
+        }
         return false;
+    }
+
+    @Override
+    public boolean delete(Reservation reservation) throws DataException {
+        for(Reservation r : reservations){
+            if(r.getResId() == reservation.getResId()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public BigDecimal findTotal(Reservation reservation) {
+        return null;
     }
 }
