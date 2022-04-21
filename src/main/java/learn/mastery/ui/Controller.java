@@ -93,8 +93,10 @@ public class Controller {
         view.displayHeader(MainMenuOption.EDIT.getMessage());
         Host host = selectHost();
         List<Reservation> reservations = displayReservations(host);
-
         Reservation reservation = view.chooseReservation(reservations);
+        if(reservation == null){
+            return;
+        }
         Reservation editedDates = view.makeEditedDates();
         reservation.setStartDate(editedDates.getStartDate());
         reservation.setEndDate(editedDates.getEndDate());
@@ -119,24 +121,28 @@ public class Controller {
     private void delete() throws DataException {
         view.displayHeader(MainMenuOption.DELETE.getMessage());
         Host host = selectHost();
+        if(host == null){
+            return;
+        }
         List<Reservation> reservations = reservationService.findById(host.getId());
         reservations = view.filterFutureReservations(reservations);
         view.displayReservations(reservations);
         Reservation reservation = view.chooseReservation(reservations);
-        if(reservation!=null){
-            view.displayHeader("Confirm deletion?");
-            view.displayReservationSummary(reservation);
-            boolean confirmDelete = view.confirm();
-            if(confirmDelete) {
-                Result<Reservation> result = reservationService.delete(reservation);
-                if (!result.isSuccess()) {
-                    view.displayStatus(false, result.getErrorMessages());
-                } else {
-                    view.displayStatus(true, "Reservation deleted.");
-                }
-            }else{
-                view.displayHeader("Cancelling deletion...");
+        if(reservation == null){
+            return;
+        }
+        view.displayHeader("Confirm deletion?");
+        view.displayReservationSummary(reservation);
+        boolean confirmDelete = view.confirm();
+        if(confirmDelete) {
+            Result<Reservation> result = reservationService.delete(reservation);
+            if (!result.isSuccess()) {
+                view.displayStatus(false, result.getErrorMessages());
+            } else {
+                view.displayStatus(true, "Reservation deleted.");
             }
+        }else{
+            view.displayHeader("Cancelling deletion...");
         }
         view.enterToContinue();
     }
