@@ -6,7 +6,7 @@ import learn.mastery.models.Reservation;
 import learn.mastery.models.State;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -96,6 +96,12 @@ public class View {
                 .collect(Collectors.toList());
     }
 
+    public List<Reservation> filterFutureReservations(List<Reservation> all){
+        return all.stream()
+                .filter(reservation -> reservation.getStartDate().isAfter(LocalDate.now()))
+                .collect(Collectors.toList());
+    }
+
     public List<Guest> filterGuestByState(List<Guest> all, String stateAbb) {
         return all.stream()
                 .filter(guest -> guest.getState().equalsIgnoreCase(stateAbb))
@@ -133,7 +139,7 @@ public class View {
         return reservation;
     }
 
-    public boolean confirmEdit() {
+    public boolean confirm() {
 
         while (true) {
             String response = io.readRequiredString("Confirm? [y/n]: ");
@@ -148,7 +154,9 @@ public class View {
 
     public void displayReservationSummary(Reservation reservation) {
         displayHeader("Reservation");
-        io.printf("Start Date: %s %nEnd Date: %s %nTotal Cost: $%s%n",
+        io.printf("Guest: %s %s %nStart Date: %s %nEnd Date: %s %nTotal Cost: $%s%n",
+                reservation.getGuest().getFirstName(),
+                reservation.getGuest().getLastName(),
                 reservation.getStartDate(),
                 reservation.getEndDate(),
                 reservation.getTotal().setScale(2, RoundingMode.HALF_UP));

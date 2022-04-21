@@ -45,7 +45,7 @@ public class Controller {
                 case VIEW -> viewById();
                 case ADD -> addReservation();
                 case EDIT -> edit();
-                case DELETE -> System.out.println("Feature not implemented yet");
+                case DELETE -> delete();
             }
         } while (option != MainMenuOption.EXIT);
     }
@@ -93,23 +93,50 @@ public class Controller {
         view.displayHeader(MainMenuOption.EDIT.getMessage());
         Host host = selectHost();
         List<Reservation> reservations = displayReservations(host);
+
         Reservation reservation = view.chooseReservation(reservations);
         Reservation editedDates = view.makeEditedDates();
         reservation.setStartDate(editedDates.getStartDate());
         reservation.setEndDate(editedDates.getEndDate());
         reservation.setTotal(reservationService.findTotal(reservation));
+
         view.displayHeader("Confirm changes?");
         view.displayReservationSummary(reservation);
-        boolean confirmEdit = view.confirmEdit();
+        boolean confirmEdit = view.confirm();
         if(confirmEdit){
             Result<Reservation> result = reservationService.update(reservation);
             if(!result.isSuccess()){
                 view.displayStatus(false, result.getErrorMessages());
             }else{
-                view.displayStatus(true,"Success! Reservation updated.");
+                view.displayStatus(true,"Reservation updated.");
             }
         }else{
             view.displayHeader("Reverting changes.");
+        }
+        view.enterToContinue();
+    }
+
+    private void delete() throws DataException {
+        view.displayHeader(MainMenuOption.DELETE.getMessage());
+        Host host = selectHost();
+        List<Reservation> reservations = reservationService.findById(host.getId());
+        reservations = view.filterFutureReservations(reservations);
+        view.displayReservations(reservations);
+        Reservation reservation = view.chooseReservation(reservations);
+        if(reservation!=null){
+            view.displayHeader("Confirm deletion?");
+            view.displayReservationSummary(reservation);
+            boolean confirmDelete = view.confirm();
+            if(confirmDelete) {
+                Result<Reservation> result = reservationService.delete(reservation);
+                if (!result.isSuccess()) {
+                    view.displayStatus(false, result.getErrorMessages());
+                } else {
+                    view.displayStatus(true, "Reservation deleted.");
+                }
+            }else{
+                view.displayHeader("Cancelling deletion...");
+            }
         }
         view.enterToContinue();
     }

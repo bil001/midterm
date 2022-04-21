@@ -80,6 +80,7 @@ public class ReservationFileRepository implements ReservationRepository {
         for(Reservation r : all){
             if(r.getResId()== reservation.getResId()){
                 all.remove(r);
+                writeAll(all, reservation.getHost().getId());
                 return true;
             }
         }

@@ -96,7 +96,7 @@
   - Collect guest and host id from view
   - Call method from controller
   - Print summary from view
-- [ ] Work on update reservation
+- [ x ] Work on update reservation
   - Estimated time: 3 hrs
   - Actual time: 
   - Create edit method in repo

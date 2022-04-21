@@ -8,6 +8,7 @@ import learn.mastery.models.Reservation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -67,8 +68,8 @@ class ReservationFileRepositoryTest {
     @Test
     void shouldCalculateTotal() throws DataException{
         Reservation reservation = new Reservation();
-        reservation.setStartDate(LocalDate.now());
-        reservation.setEndDate(LocalDate.now().plusDays(2));
+        reservation.setStartDate(LocalDate.of(2022,4,20));
+        reservation.setEndDate(LocalDate.of(2022,4,22));
 
         Guest guest = new Guest();
         guest.setId(50);
@@ -124,6 +125,32 @@ class ReservationFileRepositoryTest {
         host.setWeekendRate(BigDecimal.valueOf(50));
 
         boolean result = repo.update(reservation);
+        assertFalse(result);
+    }
+
+    @Test
+    void shouldDelete() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(1);
+
+        Host host = new Host();
+        host.setId("3edda6bc-ab95-49a8-8962-d50b53f84b15");
+        reservation.setHost(host);
+
+        boolean result = repo.delete(reservation);
+        assertTrue(result);
+    }
+
+    @Test
+    void shouldNotDelete() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(0);
+
+        Host host = new Host();
+        host.setId("3edda6bc-ab95-49a8-8962-d50b53f84b15");
+        reservation.setHost(host);
+
+        boolean result = repo.delete(reservation);
         assertFalse(result);
     }
 }

@@ -70,6 +70,19 @@ public class ReservationService {
         return result;
     }
 
+    public Result<Reservation> delete(Reservation reservation) throws DataException{
+        Result<Reservation> result = new Result<>();
+        validateStartInPast(reservation, result);
+        if(!result.isSuccess()){
+            return result;
+        }
+        boolean success = reservationRepo.delete(reservation);
+        if(!success){
+            result.addErrorMessage("Could not find reservation.");
+        }
+        return result;
+    }
+
     public BigDecimal findTotal(Reservation reservation){
         Result<Reservation> result = new Result<>();
         validateStartInPast(reservation,result);

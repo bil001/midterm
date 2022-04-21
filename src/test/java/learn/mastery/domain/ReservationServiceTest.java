@@ -263,4 +263,48 @@ class ReservationServiceTest {
         assertFalse(result.isSuccess());
         assertEquals("Host id not found.",result.getErrorMessages().get(0));
     }
+
+    @Test
+    void shouldDelete() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(1);
+        reservation.setStartDate(LocalDate.now());
+        reservation.setEndDate(LocalDate.now().plusDays(2));
+        reservation.setHost(HOST);
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.delete(reservation);
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotDelete() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(0);
+        reservation.setStartDate(LocalDate.now());
+        reservation.setEndDate(LocalDate.now().plusDays(2));
+        reservation.setHost(HOST);
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.delete(reservation);
+        assertFalse(result.isSuccess());
+        assertEquals("Could not find reservation.", result.getErrorMessages().get(0));
+    }
+
+    @Test
+    void shouldNotDeletePastStart() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(1);
+        reservation.setStartDate(LocalDate.now().minusDays(1));
+        reservation.setEndDate(LocalDate.now().plusDays(2));
+        reservation.setHost(HOST);
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.delete(reservation);
+        assertFalse(result.isSuccess());
+        assertEquals("The start date must be in the future.", result.getErrorMessages().get(0));
+    }
 }
