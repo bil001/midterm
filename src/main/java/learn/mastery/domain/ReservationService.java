@@ -74,11 +74,11 @@ public class ReservationService {
         Result<Reservation> result = new Result<>();
         validateStartInPast(reservation,result);
         if(!result.isSuccess()){
-            return null;
+            return BigDecimal.ZERO;
         }
         validateSequence(reservation, result);
         if(!result.isSuccess()){
-            return null;
+            return BigDecimal.ZERO;
         }
         return reservationRepo.findTotal(reservation);
     }
@@ -90,6 +90,11 @@ public class ReservationService {
         }
 
         validateSequence(reservation,result);
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        validateStartInPast(reservation,result);
         if(!result.isSuccess()){
             return result;
         }

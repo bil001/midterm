@@ -95,10 +95,22 @@ public class Controller {
         List<Reservation> reservations = displayReservations(host);
         Reservation reservation = view.chooseReservation(reservations);
         Reservation editedDates = view.makeEditedDates();
-        reservation.setTotal(reservationService.findTotal(editedDates));
         reservation.setStartDate(editedDates.getStartDate());
         reservation.setEndDate(editedDates.getEndDate());
-        
+        reservation.setTotal(reservationService.findTotal(reservation));
+        view.displayHeader("Confirm changes?");
+        view.displayReservationSummary(reservation);
+        boolean confirmEdit = view.confirmEdit();
+        if(confirmEdit){
+            Result<Reservation> result = reservationService.update(reservation);
+            if(!result.isSuccess()){
+                view.displayStatus(false, result.getErrorMessages());
+            }else{
+                view.displayStatus(true,"Success! Reservation updated.");
+            }
+        }else{
+            view.displayHeader("Reverting changes.");
+        }
         view.enterToContinue();
     }
 
