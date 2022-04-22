@@ -69,6 +69,21 @@ public class View {
         return guest;
     }
 
+    public Host makeHost(){
+        Host host = new Host();
+        host.setId("0");
+        host.setLastName(io.readRequiredString("Last name: "));
+        host.setEmail(io.readRequiredString("Email: "));
+        host.setPhone(io.readRequiredString("Phone: "));
+        host.setAddress(io.readRequiredString("Address: "));
+        host.setCity(io.readRequiredString("City: "));
+        host.setState(getState());
+        host.setPostalCode(io.readInt("Postal Code: "));
+        host.setStandardRate(io.readBigDecimal("Standard rate: "));
+        host.setWeekendRate(io.readBigDecimal("Weekend rate: "));
+        return host;
+    }
+
     public Reservation makeReservation(Host host, Guest guest) {
         Reservation reservation = new Reservation();
         reservation.setHost(host);
@@ -168,7 +183,7 @@ public class View {
         }
 
         for (Guest g : guests) {
-            io.printf("Name: %s %s | id: [%s] | Email: %s%n | State: %s",
+            io.printf("Name: %s %s | id: [%s] | Email: %s | State: %s%n",
                     g.getFirstName(),
                     g.getLastName(),
                     g.getId(),

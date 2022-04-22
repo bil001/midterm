@@ -26,11 +26,11 @@ public class Controller {
         this.view = view;
     }
 
-    public void run(){
+    public void run() {
         view.displayHeader("Welcome to Don't Wreck My House!");
-        try{
+        try {
             runAppLoop();
-        }catch(DataException ex){
+        } catch (DataException ex) {
             view.displayException(ex);
         }
         view.displayHeader("Goodbye...");
@@ -46,27 +46,28 @@ public class Controller {
                 case ADD -> addReservation();
                 case EDIT -> edit();
                 case DELETE -> delete();
+                case ADD_HOST -> addHost();
             }
         } while (option != MainMenuOption.EXIT);
     }
 
-    private void viewById(){
+    private void viewById() {
         view.displayHeader(MainMenuOption.VIEW.getMessage());
         Host host = selectHost();
-        if(host!=null) {
+        if (host != null) {
             displayReservations(host);
         }
         view.enterToContinue();
     }
 
-    private void addReservation() throws DataException{
+    private void addReservation() throws DataException {
         view.displayHeader(MainMenuOption.ADD.getMessage());
         Host host = selectHost();
-        if(host==null){
+        if (host == null) {
             return;
         }
         Guest guest = selectGuest();
-        if(guest==null){
+        if (guest == null) {
             return;
         }
         Reservation reservation = view.makeReservation(host, guest);
@@ -75,11 +76,11 @@ public class Controller {
             view.displayStatus(false, result.getErrorMessages());
         } else {
             String successMessage = String.format("+++++++++++++++++%n" +
-                    "Reservation %s created.%n" +
-                    "Start Date: %s%n" +
-                    "End Date: %s%n" +
-                    "Price: $%s%n" +
-                    "+++++++++++++++++",
+                            "Reservation %s created.%n" +
+                            "Start Date: %s%n" +
+                            "End Date: %s%n" +
+                            "Price: $%s%n" +
+                            "+++++++++++++++++",
                     result.getPayload().getResId(),
                     result.getPayload().getStartDate(),
                     result.getPayload().getEndDate(),
@@ -89,12 +90,12 @@ public class Controller {
         view.enterToContinue();
     }
 
-    private void edit() throws DataException{
+    private void edit() throws DataException {
         view.displayHeader(MainMenuOption.EDIT.getMessage());
         Host host = selectHost();
         List<Reservation> reservations = displayReservations(host);
         Reservation reservation = view.chooseReservation(reservations);
-        if(reservation == null){
+        if (reservation == null) {
             return;
         }
         Reservation editedDates = view.makeEditedDates();
@@ -105,14 +106,14 @@ public class Controller {
         view.displayHeader("Confirm changes?");
         view.displayReservationSummary(reservation);
         boolean confirmEdit = view.confirm();
-        if(confirmEdit){
+        if (confirmEdit) {
             Result<Reservation> result = reservationService.update(reservation);
-            if(!result.isSuccess()){
+            if (!result.isSuccess()) {
                 view.displayStatus(false, result.getErrorMessages());
-            }else{
-                view.displayStatus(true,"Reservation updated.");
+            } else {
+                view.displayStatus(true, "Reservation updated.");
             }
-        }else{
+        } else {
             view.displayHeader("Reverting changes.");
         }
         view.enterToContinue();
@@ -121,44 +122,63 @@ public class Controller {
     private void delete() throws DataException {
         view.displayHeader(MainMenuOption.DELETE.getMessage());
         Host host = selectHost();
-        if(host == null){
+        if (host == null) {
             return;
         }
         List<Reservation> reservations = reservationService.findById(host.getId());
         reservations = view.filterFutureReservations(reservations);
         view.displayReservations(reservations);
         Reservation reservation = view.chooseReservation(reservations);
-        if(reservation == null){
+        if (reservation == null) {
             return;
         }
         view.displayHeader("Confirm deletion?");
         view.displayReservationSummary(reservation);
         boolean confirmDelete = view.confirm();
-        if(confirmDelete) {
+        if (confirmDelete) {
             Result<Reservation> result = reservationService.delete(reservation);
             if (!result.isSuccess()) {
                 view.displayStatus(false, result.getErrorMessages());
             } else {
                 view.displayStatus(true, "Reservation deleted.");
             }
-        }else{
+        } else {
             view.displayHeader("Cancelling deletion...");
         }
         view.enterToContinue();
     }
 
-    private Host selectHost(){
+    private void addHost() throws DataException {
+        view.displayHeader(MainMenuOption.ADD_HOST.getMessage());
+        Host host = view.makeHost();
+        Result<Host> result = hostService.add(host);
+        if (!result.isSuccess()) {
+            view.displayStatus(false, result.getErrorMessages());
+        } else {
+            view.displayStatus(true,String.format("+++++++++++++++++%n" +
+                            "Host %s added. %nState: %s %nStandard Rate: $%s %nWeekend Rate: $%s%n" +
+                            "+++++++++++++++++%n",
+                    result.getPayload().getLastName(),
+                    result.getPayload().getState(),
+                    result.getPayload().getStandardRate(),
+                    result.getPayload().getWeekendRate()));
+        }
+        view.enterToContinue();
+    }
+
+    private Host selectHost() {
         List<Host> hosts = hostService.findAll();
         view.displayHeader("Host's state");
         String hostState = view.getState();
-        hosts = view.filterHostByState(hosts,hostState);
+        hosts = view.filterHostByState(hosts, hostState);
         return view.chooseHost(hosts);
     }
-    private Guest selectGuest(){
+
+    private Guest selectGuest() {
         List<Guest> guests = guestService.findAll();
         view.displayHeader("Guest's state");
         String guestState = view.getState();
-        guests = view.filterGuestByState(guests,guestState);
+        guests = view.filterGuestByState(guests, guestState);
         return view.chooseGuest(guests);
     }
 

@@ -32,4 +32,19 @@ public class HostRepositoryDouble implements HostRepository{
     public List<Host> findAll() {
         return new ArrayList<>(hosts);
     }
+
+    @Override
+    public Host add(Host host) throws DataException {
+        return null;
+    }
+
+    @Override
+    public boolean update(Host host) throws DataException {
+        return false;
+    }
+
+    @Override
+    public boolean delete(Host host) throws DataException {
+        return false;
+    }
 }

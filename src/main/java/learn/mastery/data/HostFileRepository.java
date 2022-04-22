@@ -9,48 +9,85 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class HostFileRepository implements HostRepository{
+public class HostFileRepository implements HostRepository {
     private final String filePath;
     private static final String HEADER = "id,last_name,email,phone,address,city,state,postal_code,standard_rate,weekend_rate";
 
-    public HostFileRepository(String filePath){this.filePath = filePath;}
+    public HostFileRepository(String filePath) {
+        this.filePath = filePath;
+    }
 
     @Override
     public List<Host> findAll() {
         ArrayList<Host> result = new ArrayList<>();
-        try(BufferedReader reader = new BufferedReader(new FileReader(filePath))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
 
             reader.readLine();
 
-            for(String line = reader.readLine(); line != null; line = reader.readLine()){
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
 
-                String[] fields = line.split(",",-1);
-                if(fields.length==10){
+                String[] fields = line.split(",", -1);
+                if (fields.length == 10) {
                     result.add(deserialize(fields));
                 }
             }
 
-        }catch(IOException ex){
+        } catch (IOException ex) {
 
         }
         return result;
     }
 
-    private void writeAll (List<Host> hosts) throws DataException{
-        try (PrintWriter writer = new PrintWriter(filePath)){
+    @Override
+    public Host add(Host host) throws DataException {
+        List<Host> all = findAll();
+        String id = UUID.randomUUID().toString();
+        host.setId(id);
+        all.add(host);
+        writeAll(all);
+        return host;
+    }
+
+    @Override
+    public boolean update(Host host) throws DataException {
+        List<Host> all = findAll();
+        for (int i = 0; i < all.size(); i++) {
+            if (all.get(i).getId().equalsIgnoreCase(host.getId())) {
+                all.set(i,host);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(Host host) throws DataException{
+        List<Host> all = findAll();
+        for(Host h : all){
+            if(h.getId().equalsIgnoreCase(host.getId())){
+                all.remove(h);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void writeAll(List<Host> hosts) throws DataException {
+        try (PrintWriter writer = new PrintWriter(filePath)) {
             writer.println(HEADER);
 
-            for(Host h : hosts){
+            for (Host h : hosts) {
                 writer.println(serialize(h));
             }
 
-        }catch(IOException ex){
+        } catch (IOException ex) {
             throw new DataException(ex.getMessage(), ex);
         }
     }
 
-    private String serialize(Host host){
+    private String serialize(Host host) {
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
                 host.getId(),
                 host.getLastName(),
@@ -64,7 +101,7 @@ public class HostFileRepository implements HostRepository{
                 host.getWeekendRate());
     }
 
-    private Host deserialize(String[] fields){
+    private Host deserialize(String[] fields) {
         Host result = new Host();
         result.setId(fields[0]);
         result.setLastName(fields[1]);

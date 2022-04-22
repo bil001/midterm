@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,5 +31,22 @@ class HostFileRepositoryTest {
     void shouldFindAll(){
         List<Host> all = repo.findAll();
         assertEquals(1000,all.size());
+    }
+
+    @Test
+    void shouldAdd() throws DataException {
+        Host host = new Host();
+        host.setLastName("Host");
+        host.setEmail("email@gmail.com");
+        host.setPhone("11123456");
+        host.setAddress("Elm St.");
+        host.setCity("Atlanta");
+        host.setPostalCode(1234);
+        host.setStandardRate(BigDecimal.ZERO);
+        host.setWeekendRate(BigDecimal.ONE);
+        host.setState("GA");
+        repo.add(host);
+        List<Host> all = repo.findAll();
+        assertEquals(1001,all.size());
     }
 }

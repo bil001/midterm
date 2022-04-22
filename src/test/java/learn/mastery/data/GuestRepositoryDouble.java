@@ -28,4 +28,19 @@ public class GuestRepositoryDouble implements GuestRepository {
     public List<Guest> findAll() {
         return new ArrayList<>(guests);
     }
+
+    @Override
+    public Guest add(Guest guest) throws DataException {
+        return null;
+    }
+
+    @Override
+    public boolean update(Guest guest) throws DataException {
+        return false;
+    }
+
+    @Override
+    public boolean delete(Guest guest) throws DataException {
+        return false;
+    }
 }

@@ -32,6 +32,45 @@ public class GuestFileRepository implements GuestRepository {
         return result;
     }
 
+    @Override
+    public Guest add(Guest guest) throws DataException{
+        List<Guest> all =findAll();
+        guest.setId(nextId(all));
+        all.add(guest);
+        writeAll(all);
+        return guest;
+    }
+
+    @Override
+    public boolean update(Guest guest) throws DataException{
+        List<Guest> all = findAll();
+        for (int i = 0; i < all.size(); i++) {
+            if(all.get(i).getId() == guest.getId()){
+                all.set(i,guest);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(Guest guest) throws DataException{
+        List<Guest> all = findAll();
+        for(Guest g : all){
+            if(g.getId() == guest.getId()){
+                all.remove(g);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int nextId(List<Guest> all){
+        return all.stream()
+                .mapToInt(Guest::getId)
+                .max()
+                .orElse(0) + 1;
+    }
+
     private String serialize(Guest guest) {
         return String.format("%s,%s,%s,%s,%s,%s",
                 guest.getId(),
