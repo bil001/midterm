@@ -98,7 +98,7 @@
   - Print summary from view
 - [ x ] Work on update reservation
   - Estimated time: 3 hrs
-  - Actual time: 
+  - Actual time: 4 hrs
   - Create edit method in repo
     - Parameters:
       - Guest
@@ -113,9 +113,9 @@
   -Pass into controller
 
 * THURS Afternoon / FRI Morning  
-- [ ] Work on delete reservation
+- [ x ] Work on delete reservation
   - Estimated time: 2 hrs
-  - Actual time:  
+  - Actual time: 1 hr 
   - Parameters:
     - Guest
     - Host
@@ -123,4 +123,4 @@
     - Ensure date not in past
   
 * FRI Afternoon / Weekend  
-- [ ] Work on bug fixing and polish
+- [ x ] Work on bug fixing and polish
