@@ -6,7 +6,8 @@ public enum MainMenuOption {
     ADD(2,"Make a Reservation"),
     EDIT(3,"Edit a Reservation"),
     DELETE(4,"Remove a Reservation"),
-    ADD_HOST(5,"Add a New Host");
+    ADD_HOST(5,"Add a New Host"),
+    ADD_GUEST(6,"Add a New Guest");
 
     private int value;
     private String message;

@@ -178,6 +178,9 @@ public class ReservationService {
         if(reservation.getStartDate().isAfter(reservation.getEndDate())){
             result.addErrorMessage("The start date must be before the end date.");
         }
+        if(reservation.getStartDate().isEqual(reservation.getEndDate())){
+            result.addErrorMessage("Reservation start and end date cannot be equal.");
+        }
     }
 
     private void validateStartInPast(Reservation reservation, Result<Reservation> result){

@@ -83,7 +83,7 @@ class ReservationFileRepositoryTest {
 
         reservation = repo.add(reservation);
 
-        assertEquals(BigDecimal.valueOf(350), reservation.getTotal());
+        assertEquals(BigDecimal.valueOf(200), reservation.getTotal());
     }
 
     @Test

@@ -206,6 +206,21 @@ class ReservationServiceTest {
     }
 
     @Test
+    void shouldNotAddSameStartEnd() throws DataException{
+        Reservation reservation = new Reservation();
+        reservation.setResId(0);
+        reservation.setStartDate(LocalDate.of(2024,4,19));
+        reservation.setEndDate(LocalDate.of(2024,4,19));
+        reservation.setHost(HOST);
+        reservation.setGuest(GUEST);
+        reservation.setTotal(BigDecimal.valueOf(200));
+
+        Result<Reservation> result = service.add(reservation);
+        assertFalse(result.isSuccess());
+        assertEquals("Reservation start and end date cannot be equal.",result.getErrorMessages().get(0));
+    }
+
+    @Test
     void shouldUpdate() throws DataException{
         Reservation reservation = new Reservation();
         reservation.setResId(1);

@@ -97,7 +97,7 @@ public class ReservationFileRepository implements ReservationRepository {
 
         BigDecimal total = BigDecimal.ZERO;
 
-        for (; !start.isEqual(end.plusDays(1)); start = start.plusDays(1)) {
+        for (; !start.isEqual(end); start = start.plusDays(1)) {
             if(start.getDayOfWeek()== DayOfWeek.FRIDAY
                     || start.getDayOfWeek() == DayOfWeek.SATURDAY){
                 total = total.add(weekendRate);

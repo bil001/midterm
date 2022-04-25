@@ -47,6 +47,7 @@ public class Controller {
                 case EDIT -> edit();
                 case DELETE -> delete();
                 case ADD_HOST -> addHost();
+                case ADD_GUEST -> addGuest();
             }
         } while (option != MainMenuOption.EXIT);
     }
@@ -162,6 +163,24 @@ public class Controller {
                     result.getPayload().getState(),
                     result.getPayload().getStandardRate(),
                     result.getPayload().getWeekendRate()));
+        }
+        view.enterToContinue();
+    }
+
+    private void addGuest() throws DataException{
+        view.displayHeader(MainMenuOption.ADD_GUEST.getMessage());
+        Guest guest = view.makeGuest();
+        Result<Guest> result = guestService.add(guest);
+        if(!result.isSuccess()){
+            view.displayStatus(false, result.getErrorMessages());
+        }else{
+            view.displayStatus(true,String.format("+++++++++++++++++%n" +
+                        "Guest %s %s added. %nEmail: %s %nState: %s%n" +
+                            "+++++++++++++++++%n",
+                    result.getPayload().getFirstName(),
+                    result.getPayload().getLastName(),
+                    result.getPayload().getEmail(),
+                    result.getPayload().getState()));
         }
         view.enterToContinue();
     }

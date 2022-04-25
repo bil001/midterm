@@ -84,6 +84,17 @@ public class View {
         return host;
     }
 
+    public Guest makeGuest(){
+        Guest guest = new Guest();
+        guest.setId(0);
+        guest.setFirstName(io.readRequiredString("First name: "));
+        guest.setLastName(io.readRequiredString("Last name: "));
+        guest.setEmail(io.readRequiredString("Email: "));
+        guest.setPhone(io.readRequiredString("Phone: "));
+        guest.setState(getState());
+        return guest;
+    }
+
     public Reservation makeReservation(Host host, Guest guest) {
         Reservation reservation = new Reservation();
         reservation.setHost(host);
